@@ -1,14 +1,18 @@
+
+/* Base body styles */
 body {
-  background: linear-gradient(135deg, #c3ecb2, #85e3ff);
-  font-family: 'Poppins', sans-serif;
   margin: 0;
   padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #c3ecb2, #85e3ff); 
+ 
 }
 
+/* Main form container */
 .product-container {
-  max-width: 400px;
-  height: 450px;
-  margin: 60px auto;
+  max-width: 450px;
+  margin: auto;
+  margin-top: 50px;
   padding: 40px;
   background: linear-gradient(145deg, #ffffff, #f0f4ff);
   border-radius: 20px;
@@ -17,15 +21,16 @@ body {
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
+/* Hover effect */
 .product-container:hover {
   transform: translateY(-5px);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
 }
 
-/* Heading */
+/* Heading styles */
 .product-container h1 {
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   color: #6a1b9a;
   margin-bottom: 35px;
   position: relative;
@@ -47,20 +52,20 @@ body {
   to { width: 70px; opacity: 1; }
 }
 
-/* Labels */
+/* Label styles */
 .product-container label {
   display: block;
   font-weight: 600;
   margin-bottom: 8px;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: #444;
 }
 
-/* Inputs & Textarea */
+/* Inputs and textareas */
 .product-container input,
 .product-container textarea {
   width: 100%;
-  padding: 8px 10px;
+  padding: 10px 12px;
   margin-bottom: 20px;
   border: 2px solid #ddd;
   border-radius: 12px;
@@ -68,9 +73,10 @@ body {
   transition: all 0.4s ease;
   background: #fafafa;
   color: #333;
+  resize: vertical;
 }
 
-/* Focus animation */
+/* Focus effect */
 .product-container input:focus,
 .product-container textarea:focus {
   border-color: #6a1b9a;
@@ -80,18 +86,19 @@ body {
   transform: scale(1.02);
 }
 
-/* Button group container */
+/* Button group layout */
 .button-group {
   display: flex;
   justify-content: center;
-  gap: 10px; /* spacing between buttons */
+  gap: 10px;
   margin-top: 10px;
+  flex-wrap: wrap;
 }
 
-/* Buttons */
+/* Button styles */
 .product-container button {
   background: linear-gradient(90deg, #9c27b0, #6a1b9a);
-  padding: 8px 16px;
+  padding: 10px 18px;
   font-size: 0.95rem;
   border: none;
   color: #fff;
@@ -108,23 +115,24 @@ body {
   box-shadow: 0 10px 25px rgba(25, 118, 210, 0.4);
 }
 
-/* Responsive */
+/* Responsive Design */
 @media (max-width: 768px) {
   .product-container {
-    margin: 20px;
+    margin: 20px auto;
     padding: 25px;
   }
 
   .product-container h1 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 
   .product-container label {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
   }
 
   .button-group {
-    flex-direction: column; /* stack buttons on smaller screens */
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .button-group button {
