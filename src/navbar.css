@@ -1,0 +1,58 @@
+/* Navbar container */
+nav {
+  display: flex;
+  justify-content: center;        /* center the menu items */
+  align-items: center;
+  background: linear-gradient(90deg, #6a1b9a, #4a148c); /* subtle gradient */
+  padding: 15px 0;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+  border-radius: 0 0 12px 12px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: background 0.3s ease;
+}
+
+/* Navbar list items */
+nav li {
+  display: inline-block;
+  list-style: none;
+  margin: 0 25px;
+  position: relative;
+}
+
+/* Navbar links */
+nav li a {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect with subtle background and scale */
+nav li a:hover {
+  color: #ffeb3b; /* yellow highlight */
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Responsive: stack nav items on small screens */
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    padding: 15px 0;
+  }
+
+  nav li {
+    margin: 10px 0;
+  }
+
+  nav li a {
+    font-size: 1rem;
+    padding: 10px 15px;
+  }
+}

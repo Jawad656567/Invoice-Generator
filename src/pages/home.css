@@ -1,0 +1,93 @@
+
+.home-container {
+  min-height: 100vh; 
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;     
+  background: linear-gradient(135deg, #c3ecb2, #85e3ff); 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+/* Main heading */
+.home-container h1 {
+  font-size: 3rem;
+  margin-bottom: 25px;
+  color: #4a148c;
+  text-align: center;
+}
+
+/* Paragraph */
+.home-container p {
+  font-size: 1.2rem;
+  max-width: 800px;
+  text-align: center;
+  line-height: 1.8;
+  margin-bottom: 40px;
+  color: #333;
+}
+
+/* Cards container */
+.home-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+  width: 100%;
+}
+
+/* Individual cards */
+.home-card {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  text-align: center;
+  flex: 1 1 250px; /* responsive width */
+  max-width: 300px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.home-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+.home-card h2 {
+  font-size: 1.5rem;
+  color: #6a1b9a;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #6a1b9a;
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+.home-card p {
+  font-size: 1rem;
+  color: #555;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .home-container h1 {
+    font-size: 2.5rem;
+  }
+
+  .home-container p {
+    font-size: 1rem;
+  }
+
+  .home-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .home-card {
+    max-width: 90%;
+  }
+}
