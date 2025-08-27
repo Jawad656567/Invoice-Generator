@@ -11,14 +11,8 @@ function Home() {
       <h2>Shop Details</h2>
       <p>Enter your shop or mall information here.</p>
     </div>
-    <div className="home-card">
-      <h2>Customer Details</h2>
-      <p>Save and update customer information.</p>
-    </div>
-    <div className="home-card">
-      <h2>Product Details</h2>
-      <p>Add products and their pricing here.</p>
-    </div>
+    
+    
   </div>
 </div>
 

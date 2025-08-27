@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./shopdetails.css";
 
 function Shop() {
   const [shopname, setshopname] = useState("");
@@ -9,7 +10,7 @@ function Shop() {
   const [open, setopen] = useState("");
   const [shopType, setShopType] = useState("");
   const [savedData, setSavedData] = useState(null);
-  const [isEditing, setIsEditing] = useState(true); // yeh control karega form dikhana hai ya data
+  const [isEditing, setIsEditing] = useState(true);
 
   const handler = (e) => {
     e.preventDefault();
@@ -22,20 +23,22 @@ function Shop() {
       open,
       shopType,
     });
-    setIsEditing(false); // save karne ke baad form hide kar do
+    setIsEditing(false);
   };
 
   return (
-    <div>
-      <h1>Enter Shop Details</h1>
+    <div className="shop-container">
+      
 
       {isEditing ? (
         <form onSubmit={handler}>
+          <h1>Enter Shop Details</h1>
           <label>Shop Name:</label>
           <input
             type="text"
             value={shopname}
             onChange={(e) => setshopname(e.target.value)}
+            required
           />
 
           <label>Location:</label>
@@ -43,6 +46,7 @@ function Shop() {
             type="text"
             value={location}
             onChange={(e) => setlocation(e.target.value)}
+            required
           />
 
           <label>Contact Number:</label>
@@ -50,13 +54,15 @@ function Shop() {
             type="text"
             value={contact}
             onChange={(e) => setcontact(e.target.value)}
+            required
           />
 
           <label>Email:</label>
           <input
-            type="text"
+            type="email"
             value={email}
             onChange={(e) => setemail(e.target.value)}
+            required
           />
 
           <label>Owner Name:</label>
@@ -64,6 +70,7 @@ function Shop() {
             type="text"
             value={owner}
             onChange={(e) => setowner(e.target.value)}
+            required
           />
 
           <label>Opening Hours:</label>
@@ -72,12 +79,14 @@ function Shop() {
             value={open}
             placeholder="9am to 9pm"
             onChange={(e) => setopen(e.target.value)}
+            required
           />
 
           <label>Shop Type:</label>
           <select
             value={shopType}
             onChange={(e) => setShopType(e.target.value)}
+            required
           >
             <option value="">Select</option>
             <option value="retail">Retail</option>
@@ -86,38 +95,27 @@ function Shop() {
             <option value="other">Other</option>
           </select>
 
-          <br />
-          <br />
-
-          <button type="submit">Save</button>
+          <div className="btn-group">
+            <button type="submit">Save</button>
+          </div>
         </form>
       ) : (
         savedData && (
-          <div style={{ marginTop: "20px" }}>
-            <h2>Shop Details</h2>
-            <p>
-              <strong>Shop Name:</strong> {savedData.shopname}
-            </p>
-            <p>
-              <strong>Location:</strong> {savedData.location}
-            </p>
-            <p>
-              <strong>Contact:</strong> {savedData.contact}
-            </p>
-            <p>
-              <strong>Email:</strong> {savedData.email}
-            </p>
-            <p>
-              <strong>Owner:</strong> {savedData.owner}
-            </p>
-            <p>
-              <strong>Opening Hours:</strong> {savedData.open}
-            </p>
-            <p>
-              <strong>Shop Type:</strong> {savedData.shopType}
-            </p>
+          <div>
+            <h2 style={{ textAlign: "center", color: "#6a1b9a" }}>
+              Shop Details
+            </h2>
+            <p><strong>Shop Name:</strong> {savedData.shopname}</p>
+            <p><strong>Location:</strong> {savedData.location}</p>
+            <p><strong>Contact:</strong> {savedData.contact}</p>
+            <p><strong>Email:</strong> {savedData.email}</p>
+            <p><strong>Owner:</strong> {savedData.owner}</p>
+            <p><strong>Opening Hours:</strong> {savedData.open}</p>
+            <p><strong>Shop Type:</strong> {savedData.shopType}</p>
 
-            <button onClick={() => setIsEditing(true)}>Edit</button>
+            <div className="btn-group">
+              <button onClick={() => setIsEditing(true)}>Edit</button>
+            </div>
           </div>
         )
       )}

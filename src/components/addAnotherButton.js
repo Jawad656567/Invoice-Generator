@@ -1,7 +1,7 @@
 const buttonn=function button ()  {
   
     return (
-       <button type="button">Add Another Product</button>
+       <button type="button">Add product</button>
       
     )
   }
