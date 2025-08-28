@@ -1,26 +1,26 @@
-
+/* Global Styles */
 body {
   margin: 0;
   padding: 0;
   font-family: 'Poppins', sans-serif;
- background: linear-gradient(135deg, #c3ecb2, #85e3ff); 
+  background: linear-gradient(135deg, #c3ecb2, #85e3ff);
 }
 
-
+/* Form Container */
 .product-container {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 35px;
+  max-width: 500px;  /* choti width */
+  margin: 30px auto;
+  padding: 25px;    /* thodi kam padding */
   background: #fff;
-  border-radius: 15px;
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   animation: fadeSlideUp 0.6s ease;
 }
 
 @keyframes fadeSlideUp {
   from {
     opacity: 0;
-    transform: translateY(25px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -32,15 +32,15 @@ body {
   text-align: center;
   font-size: 1.6rem;
   color: #4a148c;
-  margin-bottom: 25px;
-  border-bottom: 3px solid #9c27b0;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #9c27b0;
   display: inline-block;
-  padding-bottom: 5px;
+  padding-bottom: 4px;
 }
 
 .product-container label {
   display: block;
-  margin-top: 12px;
+  margin-top: 10px;
   font-weight: 600;
   color: #444;
 }
@@ -48,12 +48,11 @@ body {
 .product-container input,
 .product-container textarea {
   width: 100%;
-  padding: 12px 14px;
-  margin-top: 6px;
+  padding: 10px 12px; /* choti padding */
+  margin-top: 4px;
   border: 1px solid #ddd;
-  border-radius: 10px;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
+  border-radius: 8px;
+  font-size: 0.9rem;
   background: #fafafa;
 }
 
@@ -62,15 +61,15 @@ body {
   border-color: #6a1b9a;
   background: #f3e5f5;
   outline: none;
-  box-shadow: 0 0 8px rgba(106, 27, 154, 0.25);
+  box-shadow: 0 0 6px rgba(106, 27, 154, 0.25);
 }
 
-
+/* Buttons */
 .button-group {
   display: flex;
   justify-content: center;
-  gap: 12px;
-  margin-top: 20px;
+  gap: 10px;
+  margin-top: 15px;
   flex-wrap: wrap;
 }
 
@@ -78,41 +77,29 @@ body {
   background: linear-gradient(90deg, #6a1b9a, #9c27b0);
   border: none;
   color: #fff;
-  padding: 10px 20px;
+  padding: 8px 18px; /* choti buttons */
   font-weight: 600;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .product-container button:hover {
   background: linear-gradient(90deg, #9c27b0, #6a1b9a);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(106, 27, 154, 0.35);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(106, 27, 154, 0.25);
 }
 
-/* =============================== */
 /* Messages */
-/* =============================== */
 .success-text {
   color: #2e7d32;
   font-weight: 600;
-  margin: 10px 0;
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-.info-text {
-  background: #e3f2fd;
-  color: #0d47a1;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 14px;
-  margin-bottom: 15px;
+  margin: 8px 0;
   animation: fadeIn 0.5s ease-in-out;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-5px); }
+  from { opacity: 0; transform: translateY(-3px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -120,32 +107,33 @@ body {
 /* Invoice Summary Styling */
 /* =============================== */
 .summary-container {
+  max-width: 700px;  /* thodi choti width */
+  margin: 25px auto;
   padding: 25px;
   background: #ffffff;
-  border-radius: 15px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   animation: fadeSlideUp 0.6s ease;
 }
 
 .summary-container h1 {
   text-align: center;
-  font-size: 1.8rem;
+  font-size: 1.7rem;
   color: #4a148c;
-  margin-bottom: 25px;
-  letter-spacing: 1px;
+  margin-bottom: 20px;
 }
 
 .summary-container h2 {
-  margin-top: 20px;
-  font-size: 1.2rem;
+  margin-top: 15px;
+  font-size: 1.15rem;
   color: #6a1b9a;
-  border-left: 4px solid #9c27b0;
-  padding-left: 10px;
+  border-left: 3px solid #9c27b0;
+  padding-left: 8px;
 }
 
 .summary-container p {
-  font-size: 0.95rem;
-  margin: 4px 0;
+  font-size: 0.9rem;
+  margin: 3px 0;
   color: #444;
 }
 
@@ -154,13 +142,13 @@ body {
   width: 100%;
   border-collapse: collapse;
   margin-top: 15px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .summary-container table th,
 .summary-container table td {
   border: 1px solid #ddd;
-  padding: 10px;
+  padding: 8px;
   text-align: center;
 }
 
@@ -177,25 +165,23 @@ body {
 /* Grand Total */
 .summary-container h3 {
   text-align: right;
-  margin-top: 20px;
-  font-size: 1.2rem;
+  margin-top: 15px;
+  font-size: 1.1rem;
   font-weight: 700;
   color: #2e7d32;
-  border-top: 3px solid #9c27b0;
-  padding-top: 10px;
+  border-top: 2px solid #9c27b0;
+  padding-top: 8px;
 }
 
+/* Print Styles */
 @media print {
   .no-print {
-    display: none !important;
-  }
-  nav, header, footer {
     display: none !important;
   }
   body {
     background: #fff !important;
   }
-  .product-container {
+  .product-container, .summary-container {
     box-shadow: none;
     border: none;
     margin: 0;
