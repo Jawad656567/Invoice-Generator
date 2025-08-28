@@ -14,11 +14,14 @@ function Shop() {
   const [isEditing, setIsEditing] = useState(true);
   const [loading, setLoading] = useState(true);
 
+  // ✅ API URL from env
+  const API_URL = process.env.REACT_APP_API_URL;
+
   // Load existing data from backend
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/shops");
+        const res = await axios.get(`${API_URL}/shops`);
         if (res.data && res.data.length > 0) {
           const shop = res.data[0];
           setSavedData(shop);
@@ -35,13 +38,13 @@ function Shop() {
           setIsEditing(true);
         }
       } catch (err) {
-        console.error("Error fetching shop data:", err);
+        console.error("❌ Error fetching shop data:", err);
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, []);
+  }, [API_URL]);
 
   const handler = async (e) => {
     e.preventDefault();
@@ -51,18 +54,15 @@ function Shop() {
       let res;
       if (savedData) {
         // Update existing shop
-        res = await axios.put(
-          `http://localhost:5000/api/shops/${savedData._id}`,
-          data
-        );
+        res = await axios.put(`${API_URL}/shops/${savedData._id}`, data);
       } else {
         // Create new shop
-        res = await axios.post("http://localhost:5000/api/shops", data);
+        res = await axios.post(`${API_URL}/shops`, data);
       }
       setSavedData(res.data);
       setIsEditing(false);
     } catch (err) {
-      console.error("Error saving shop:", err);
+      console.error("❌ Error saving shop:", err);
     }
   };
 
@@ -144,13 +144,27 @@ function Shop() {
         savedData && (
           <div className="shop-details">
             <h2>Shop Details</h2>
-            <p><strong>Shop Name:</strong> {savedData.shopname}</p>
-            <p><strong>Location:</strong> {savedData.location}</p>
-            <p><strong>Contact:</strong> {savedData.contact}</p>
-            <p><strong>Email:</strong> {savedData.email}</p>
-            <p><strong>Owner:</strong> {savedData.owner}</p>
-            <p><strong>Opening Hours:</strong> {savedData.open}</p>
-            <p><strong>Shop Type:</strong> {savedData.shopType}</p>
+            <p>
+              <strong>Shop Name:</strong> {savedData.shopname}
+            </p>
+            <p>
+              <strong>Location:</strong> {savedData.location}
+            </p>
+            <p>
+              <strong>Contact:</strong> {savedData.contact}
+            </p>
+            <p>
+              <strong>Email:</strong> {savedData.email}
+            </p>
+            <p>
+              <strong>Owner:</strong> {savedData.owner}
+            </p>
+            <p>
+              <strong>Opening Hours:</strong> {savedData.open}
+            </p>
+            <p>
+              <strong>Shop Type:</strong> {savedData.shopType}
+            </p>
 
             <div className="btn-group">
               <button onClick={() => setIsEditing(true)}>Edit</button>
@@ -159,7 +173,9 @@ function Shop() {
         )
       )}
       {!savedData && !isEditing && (
-        <p style={{ textAlign: "center" }}>No shop data yet. Please add your shop details.</p>
+        <p style={{ textAlign: "center" }}>
+          No shop data yet. Please add your shop details.
+        </p>
       )}
     </div>
   );

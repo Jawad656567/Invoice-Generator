@@ -10,6 +10,9 @@ function Detail() {
   const [successMessage, setSuccessMessage] = useState("");
   const [savedInvoice, setSavedInvoice] = useState(null);
 
+  // ✅ API URL from env file
+  const API_URL = process.env.REACT_APP_API_URL;
+
   // Load state from localStorage when page refreshes
   useEffect(() => {
     const savedStep = localStorage.getItem("step");
@@ -58,14 +61,11 @@ function Detail() {
     }
     const invoiceData = { customer, products };
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/invoices",
-        invoiceData
-      );
+      const res = await axios.post(`${API_URL}/invoices`, invoiceData);
       setSavedInvoice(res.data);
       setStep(3);
     } catch (err) {
-      console.error("Error saving invoice:", err);
+      console.error("❌ Error saving invoice:", err);
     }
   };
 
@@ -138,8 +138,12 @@ function Detail() {
 
           <div className="button-group no-print">
             <button type="submit">Add Product</button>
-            <button type="button" onClick={handleReset}>Reset</button>
-            <button type="button" onClick={handleSaveInvoice}>Next</button>
+            <button type="button" onClick={handleReset}>
+              Reset
+            </button>
+            <button type="button" onClick={handleSaveInvoice}>
+              Next
+            </button>
           </div>
         </form>
       )}
@@ -149,9 +153,15 @@ function Detail() {
           <h1>Invoice Summary</h1>
 
           <h2>Customer Info</h2>
-          <p><strong>Name:</strong> {savedInvoice.customer.name}</p>
-          <p><strong>Address:</strong> {savedInvoice.customer.address}</p>
-          <p><strong>Date:</strong> {savedInvoice.customer.invoiceDate}</p>
+          <p>
+            <strong>Name:</strong> {savedInvoice.customer.name}
+          </p>
+          <p>
+            <strong>Address:</strong> {savedInvoice.customer.address}
+          </p>
+          <p>
+            <strong>Date:</strong> {savedInvoice.customer.invoiceDate}
+          </p>
 
           <h2>Products</h2>
           <table>
@@ -177,12 +187,17 @@ function Detail() {
 
           <h3>
             Grand Total:{" "}
-            {savedInvoice.products.reduce((sum, o) => sum + Number(o.total), 0)}
+            {savedInvoice.products.reduce(
+              (sum, o) => sum + Number(o.total),
+              0
+            )}
           </h3>
 
           <div className="button-group no-print">
             <button onClick={handlePrint}>🖨 Print</button>
-            <button type="button" onClick={handleReset}>Reset</button>
+            <button type="button" onClick={handleReset}>
+              Reset
+            </button>
           </div>
         </div>
       )}
