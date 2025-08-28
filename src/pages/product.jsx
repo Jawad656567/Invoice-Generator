@@ -2,6 +2,12 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "./product.css";
 
+// ✅ API base URL (local vs production dono ke liye support)
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? process.env.REACT_APP_API_URL
+    : process.env.REACT_APP_LOCAL_API_URL;
+
 function Detail() {
   const [step, setStep] = useState(1);
   const [customer, setCustomer] = useState({});
@@ -9,9 +15,6 @@ function Detail() {
   const [productAdded, setProductAdded] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [savedInvoice, setSavedInvoice] = useState(null);
-
-  // ✅ API URL from env file
-  const API_URL = process.env.REACT_APP_API_URL;
 
   // Load state from localStorage when page refreshes
   useEffect(() => {
@@ -187,10 +190,7 @@ function Detail() {
 
           <h3>
             Grand Total:{" "}
-            {savedInvoice.products.reduce(
-              (sum, o) => sum + Number(o.total),
-              0
-            )}
+            {savedInvoice.products.reduce((sum, o) => sum + Number(o.total), 0)}
           </h3>
 
           <div className="button-group no-print">

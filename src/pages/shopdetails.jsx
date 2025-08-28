@@ -2,6 +2,12 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "./shopdetails.css";
 
+// ✅ API base URL choose depending on environment
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? process.env.REACT_APP_API_URL
+    : process.env.REACT_APP_LOCAL_API_URL;
+
 function Shop() {
   const [shopname, setShopname] = useState("");
   const [location, setLocation] = useState("");
@@ -13,9 +19,6 @@ function Shop() {
   const [savedData, setSavedData] = useState(null);
   const [isEditing, setIsEditing] = useState(true);
   const [loading, setLoading] = useState(true);
-
-  // ✅ API URL from env
-  const API_URL = process.env.REACT_APP_API_URL;
 
   // Load existing data from backend
   useEffect(() => {
@@ -34,7 +37,6 @@ function Shop() {
           setShopType(shop.shopType || "");
           setIsEditing(false);
         } else {
-          // No data yet, show form
           setIsEditing(true);
         }
       } catch (err) {
@@ -44,7 +46,7 @@ function Shop() {
       }
     };
     fetchData();
-  }, [API_URL]);
+  }, []);
 
   const handler = async (e) => {
     e.preventDefault();
@@ -53,10 +55,8 @@ function Shop() {
     try {
       let res;
       if (savedData) {
-        // Update existing shop
         res = await axios.put(`${API_URL}/shops/${savedData._id}`, data);
       } else {
-        // Create new shop
         res = await axios.post(`${API_URL}/shops`, data);
       }
       setSavedData(res.data);
@@ -144,27 +144,13 @@ function Shop() {
         savedData && (
           <div className="shop-details">
             <h2>Shop Details</h2>
-            <p>
-              <strong>Shop Name:</strong> {savedData.shopname}
-            </p>
-            <p>
-              <strong>Location:</strong> {savedData.location}
-            </p>
-            <p>
-              <strong>Contact:</strong> {savedData.contact}
-            </p>
-            <p>
-              <strong>Email:</strong> {savedData.email}
-            </p>
-            <p>
-              <strong>Owner:</strong> {savedData.owner}
-            </p>
-            <p>
-              <strong>Opening Hours:</strong> {savedData.open}
-            </p>
-            <p>
-              <strong>Shop Type:</strong> {savedData.shopType}
-            </p>
+            <p><strong>Shop Name:</strong> {savedData.shopname}</p>
+            <p><strong>Location:</strong> {savedData.location}</p>
+            <p><strong>Contact:</strong> {savedData.contact}</p>
+            <p><strong>Email:</strong> {savedData.email}</p>
+            <p><strong>Owner:</strong> {savedData.owner}</p>
+            <p><strong>Opening Hours:</strong> {savedData.open}</p>
+            <p><strong>Shop Type:</strong> {savedData.shopType}</p>
 
             <div className="btn-group">
               <button onClick={() => setIsEditing(true)}>Edit</button>
