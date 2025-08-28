@@ -1,43 +1,84 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import "./shopdetails.css";
 
 function Shop() {
-  const [shopname, setshopname] = useState("");
-  const [location, setlocation] = useState("");
-  const [contact, setcontact] = useState("");
-  const [email, setemail] = useState("");
-  const [owner, setowner] = useState("");
-  const [open, setopen] = useState("");
+  const [shopname, setShopname] = useState("");
+  const [location, setLocation] = useState("");
+  const [contact, setContact] = useState("");
+  const [email, setEmail] = useState("");
+  const [owner, setOwner] = useState("");
+  const [open, setOpen] = useState("");
   const [shopType, setShopType] = useState("");
   const [savedData, setSavedData] = useState(null);
   const [isEditing, setIsEditing] = useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const handler = (e) => {
+  // Load existing data from backend
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/shops");
+        if (res.data && res.data.length > 0) {
+          const shop = res.data[0];
+          setSavedData(shop);
+          setShopname(shop.shopname || "");
+          setLocation(shop.location || "");
+          setContact(shop.contact || "");
+          setEmail(shop.email || "");
+          setOwner(shop.owner || "");
+          setOpen(shop.open || "");
+          setShopType(shop.shopType || "");
+          setIsEditing(false);
+        } else {
+          // No data yet, show form
+          setIsEditing(true);
+        }
+      } catch (err) {
+        console.error("Error fetching shop data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handler = async (e) => {
     e.preventDefault();
-    setSavedData({
-      shopname,
-      location,
-      contact,
-      email,
-      owner,
-      open,
-      shopType,
-    });
-    setIsEditing(false);
+    const data = { shopname, location, contact, email, owner, open, shopType };
+
+    try {
+      let res;
+      if (savedData) {
+        // Update existing shop
+        res = await axios.put(
+          `http://localhost:5000/api/shops/${savedData._id}`,
+          data
+        );
+      } else {
+        // Create new shop
+        res = await axios.post("http://localhost:5000/api/shops", data);
+      }
+      setSavedData(res.data);
+      setIsEditing(false);
+    } catch (err) {
+      console.error("Error saving shop:", err);
+    }
   };
+
+  if (loading) return <p>Loading shop data...</p>;
 
   return (
     <div className="shop-container">
-      
-
       {isEditing ? (
         <form onSubmit={handler}>
           <h1>Enter Shop Details</h1>
+
           <label>Shop Name:</label>
           <input
             type="text"
             value={shopname}
-            onChange={(e) => setshopname(e.target.value)}
+            onChange={(e) => setShopname(e.target.value)}
             required
           />
 
@@ -45,7 +86,7 @@ function Shop() {
           <input
             type="text"
             value={location}
-            onChange={(e) => setlocation(e.target.value)}
+            onChange={(e) => setLocation(e.target.value)}
             required
           />
 
@@ -53,7 +94,7 @@ function Shop() {
           <input
             type="text"
             value={contact}
-            onChange={(e) => setcontact(e.target.value)}
+            onChange={(e) => setContact(e.target.value)}
             required
           />
 
@@ -61,7 +102,7 @@ function Shop() {
           <input
             type="email"
             value={email}
-            onChange={(e) => setemail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
 
@@ -69,7 +110,7 @@ function Shop() {
           <input
             type="text"
             value={owner}
-            onChange={(e) => setowner(e.target.value)}
+            onChange={(e) => setOwner(e.target.value)}
             required
           />
 
@@ -78,7 +119,7 @@ function Shop() {
             type="text"
             value={open}
             placeholder="9am to 9pm"
-            onChange={(e) => setopen(e.target.value)}
+            onChange={(e) => setOpen(e.target.value)}
             required
           />
 
@@ -101,10 +142,8 @@ function Shop() {
         </form>
       ) : (
         savedData && (
-          <div>
-            <h2 style={{ textAlign: "center", color: "#6a1b9a" }}>
-              Shop Details
-            </h2>
+          <div className="shop-details">
+            <h2>Shop Details</h2>
             <p><strong>Shop Name:</strong> {savedData.shopname}</p>
             <p><strong>Location:</strong> {savedData.location}</p>
             <p><strong>Contact:</strong> {savedData.contact}</p>
@@ -118,6 +157,9 @@ function Shop() {
             </div>
           </div>
         )
+      )}
+      {!savedData && !isEditing && (
+        <p style={{ textAlign: "center" }}>No shop data yet. Please add your shop details.</p>
       )}
     </div>
   );

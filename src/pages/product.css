@@ -3,14 +3,14 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Poppins', sans-serif;
-   background: linear-gradient(135deg, #6d617b, #c3c7ce);
+  background: linear-gradient(135deg, #6d617b, #c3c7ce);
 }
 
 /* Form Container */
 .product-container {
-  max-width: 500px;  /* choti width */
+  max-width: 500px;  
   margin: 30px auto;
-  padding: 25px;    /* thodi kam padding */
+  padding: 25px;    
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
@@ -48,7 +48,7 @@ body {
 .product-container input,
 .product-container textarea {
   width: 100%;
-  padding: 10px 12px; /* choti padding */
+  padding: 10px 12px;
   margin-top: 4px;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -77,7 +77,7 @@ body {
   background: linear-gradient(90deg, #6a1b9a, #9c27b0);
   border: none;
   color: #fff;
-  padding: 8px 18px; /* choti buttons */
+  padding: 8px 18px;
   font-weight: 600;
   border-radius: 6px;
   cursor: pointer;
@@ -107,7 +107,7 @@ body {
 /* Invoice Summary Styling */
 /* =============================== */
 .summary-container {
-  max-width: 700px;  /* thodi choti width */
+  max-width: 700px;  
   margin: 25px auto;
   padding: 25px;
   background: #ffffff;
@@ -187,5 +187,164 @@ body {
     margin: 0;
     padding: 0;
     width: 100%;
+  }
+}
+
+/* =============================== */
+/* Responsive Styles */
+/* =============================== */
+@media (max-width: 768px) {
+  .product-container {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .summary-container {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .product-container h1,
+  .summary-container h1 {
+    font-size: 1.4rem;
+  }
+
+  .summary-container h2 {
+    font-size: 1rem;
+  }
+
+  .summary-container h3 {
+    font-size: 1rem;
+  }
+
+  .product-container input,
+  .product-container textarea,
+  .product-container button {
+    font-size: 0.85rem;
+    padding: 8px 10px;
+  }
+
+  .summary-container table th,
+  .summary-container table td {
+    padding: 6px;
+    font-size: 0.8rem;
+  }
+}
+/* Invoice Summary Responsive */
+@media (max-width: 768px) {
+  .summary-container {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .summary-container h1 {
+    font-size: 1.4rem;
+  }
+
+  .summary-container h2 {
+    font-size: 1rem;
+  }
+
+  .summary-container h3 {
+    font-size: 1rem;
+  }
+
+  /* Make table scrollable */
+  .summary-container table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .summary-container table th,
+  .summary-container table td {
+    padding: 6px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .summary-container {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .summary-container h1 {
+    font-size: 1.2rem;
+  }
+
+  .summary-container h2 {
+    font-size: 0.95rem;
+  }
+
+  .summary-container h3 {
+    font-size: 0.95rem;
+  }
+
+  .summary-container table {
+    font-size: 0.75rem;
+  }
+
+  .summary-container table th,
+  .summary-container table td {
+    padding: 4px;
+  }
+}
+
+@media print {
+  /* Hide navbar completely */
+  .navbar {
+    display: none !important;
+  }
+
+  /* Hide all buttons */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Forms bhi hide karen */
+  form.product-container {
+    display: none !important;
+  }
+
+  /* Summary container full width for print */
+  .summary-container {
+    box-shadow: none;
+    border: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .summary-container table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+
+  .summary-container table th,
+  .summary-container table td {
+    border: 1px solid #444;
+    padding: 8px;
+    text-align: center;
+  }
+
+  .summary-container table th {
+    background: #f3e5f5;
+    color: #4a148c;
+    font-weight: 600;
+  }
+
+  .summary-container table tr:nth-child(even) {
+    background: #fafafa;
+  }
+
+  .summary-container h3 {
+    text-align: right;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #2e7d32;
+    border-top: 3px solid #9c27b0;
+    padding-top: 10px;
   }
 }

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import "./product.css";
 
 function Detail() {
@@ -7,6 +8,30 @@ function Detail() {
   const [products, setProducts] = useState([]);
   const [productAdded, setProductAdded] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [savedInvoice, setSavedInvoice] = useState(null);
+
+  // Load state from localStorage when page refreshes
+  useEffect(() => {
+    const savedStep = localStorage.getItem("step");
+    const savedCustomer = localStorage.getItem("customer");
+    const savedProducts = localStorage.getItem("products");
+    const savedInvoiceData = localStorage.getItem("savedInvoice");
+
+    if (savedStep) setStep(Number(savedStep));
+    if (savedCustomer) setCustomer(JSON.parse(savedCustomer));
+    if (savedProducts) setProducts(JSON.parse(savedProducts));
+    if (savedInvoiceData) setSavedInvoice(JSON.parse(savedInvoiceData));
+  }, []);
+
+  // Save state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("step", step);
+    localStorage.setItem("customer", JSON.stringify(customer));
+    localStorage.setItem("products", JSON.stringify(products));
+    if (savedInvoice) {
+      localStorage.setItem("savedInvoice", JSON.stringify(savedInvoice));
+    }
+  }, [step, customer, products, savedInvoice]);
 
   const Submitcustomer = (e) => {
     e.preventDefault();
@@ -26,41 +51,66 @@ function Detail() {
     e.target.reset();
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
-
-  const grandTotal = products.reduce((sum, o) => sum + Number(o.total), 0);
-
-  const goToSummary = () => {
-    if (products.length === 0) {
-      alert("Please add at least one product!");
+  const handleSaveInvoice = async () => {
+    if (!customer.name || products.length === 0) {
+      alert("Customer details and at least one product are required!");
       return;
     }
-    setStep(3);
+    const invoiceData = { customer, products };
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/invoices",
+        invoiceData
+      );
+      setSavedInvoice(res.data);
+      setStep(3);
+    } catch (err) {
+      console.error("Error saving invoice:", err);
+    }
+  };
+
+  const handlePrint = () => {
+    window.print();
   };
 
   const handleReset = () => {
     setStep(1);
     setCustomer({});
     setProducts([]);
+    setSavedInvoice(null);
+    localStorage.clear(); // clear saved state
   };
 
   return (
     <div>
-     
       {step === 1 && (
         <form className="product-container" onSubmit={Submitcustomer}>
           <h1>Customer Details</h1>
 
           <label>Customer Name:</label>
-          <input type="text" name="name" placeholder="Enter customer name" required />
+          <input
+            type="text"
+            name="name"
+            placeholder="Enter customer name"
+            defaultValue={customer.name || ""}
+            required
+          />
 
           <label>Address:</label>
-          <textarea name="address" placeholder="Enter address" required></textarea>
+          <textarea
+            name="address"
+            placeholder="Enter address"
+            defaultValue={customer.address || ""}
+            required
+          ></textarea>
 
           <label>Invoice Date:</label>
-          <input type="date" name="invoiceDate" required />
+          <input
+            type="date"
+            name="invoiceDate"
+            defaultValue={customer.invoiceDate || ""}
+            required
+          />
 
           <div className="button-group no-print">
             <button type="submit">Next →</button>
@@ -89,20 +139,19 @@ function Detail() {
           <div className="button-group no-print">
             <button type="submit">Add Product</button>
             <button type="button" onClick={handleReset}>Reset</button>
-            <button type="button" onClick={goToSummary}>Next</button>
+            <button type="button" onClick={handleSaveInvoice}>Next</button>
           </div>
         </form>
       )}
 
-     
-      {step === 3 && (
+      {step === 3 && savedInvoice && (
         <div className="summary-container">
           <h1>Invoice Summary</h1>
 
           <h2>Customer Info</h2>
-          <p><strong>Name:</strong> {customer.name}</p>
-          <p><strong>Address:</strong> {customer.address}</p>
-          <p><strong>Date:</strong> {customer.invoiceDate}</p>
+          <p><strong>Name:</strong> {savedInvoice.customer.name}</p>
+          <p><strong>Address:</strong> {savedInvoice.customer.address}</p>
+          <p><strong>Date:</strong> {savedInvoice.customer.invoiceDate}</p>
 
           <h2>Products</h2>
           <table>
@@ -115,7 +164,7 @@ function Detail() {
               </tr>
             </thead>
             <tbody>
-              {products.map((p, index) => (
+              {savedInvoice.products.map((p, index) => (
                 <tr key={index}>
                   <td>{p.productName}</td>
                   <td>{p.price}</td>
@@ -126,7 +175,10 @@ function Detail() {
             </tbody>
           </table>
 
-          <h3>Grand Total: {grandTotal}</h3>
+          <h3>
+            Grand Total:{" "}
+            {savedInvoice.products.reduce((sum, o) => sum + Number(o.total), 0)}
+          </h3>
 
           <div className="button-group no-print">
             <button onClick={handlePrint}>🖨 Print</button>
