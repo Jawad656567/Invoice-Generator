@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./product.css";
+import Footer from "../components/footer";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -84,6 +85,7 @@ function Detail() {
   };
 
   return (
+    <>
     <div>
       {step === 1 && (
         <form className="product-container" onSubmit={Submitcustomer}>
@@ -194,6 +196,8 @@ function Detail() {
         </div>
       )}
     </div>
+    <Footer />
+    </>
   );
 }
 

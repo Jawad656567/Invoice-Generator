@@ -1,69 +1,47 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
-
-
-const API_URL = process.env.REACT_APP_API_URL;
 
 function HomeCard() {
-  const [text, setText] = useState("Enter your shop or mall information here.");
-  const [savedData, setSavedData] = useState(null);
+  const [text, setText] = useState(
+    "Enter your shop or mall information here."
+  );
 
-  // Load existing data from backend on component mount
+  // ✅ Page load par localStorage se data restore karo
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/shops`);
-        if (res.data.length > 0) {
-          const shop = res.data[0]; // assuming first shop for demo
-          setSavedData(shop);
-          setText(shop.shopname || "Enter your shop or mall information here.");
-        }
-      } catch (err) {
-        console.error("❌ Error fetching shop data:", err);
-      }
-    };
-    fetchData();
+    const savedText = localStorage.getItem("homeCardText");
+    if (savedText) {
+      setText(savedText);
+    }
   }, []);
 
-  const handleBlur = async (e) => {
+  const handleBlur = (e) => {
     const newText = e.target.innerText;
     setText(newText);
-
-    try {
-      let res;
-      if (savedData) {
-        // Update existing shop
-        res = await axios.put(`${API_URL}/shops/${savedData._id}`, {
-          ...savedData,
-          shopname: newText,
-        });
-      } else {
-        // Create new shop
-        res = await axios.post(`${API_URL}/shops`, {
-          shopname: newText,
-          location: "",
-          contact: "",
-          email: "",
-          owner: "",
-          open: "",
-          shopType: "",
-        });
-      }
-      setSavedData(res.data);
-    } catch (err) {
-      console.error("❌ Error saving shop data:", err);
-    }
+    localStorage.setItem("homeCardText", newText); // ✅ LocalStorage me save karo
   };
 
   return (
-    <div className="home-cards">
-      <div
-        className="home-card"
-        contentEditable
-        suppressContentEditableWarning={true}
-        onBlur={handleBlur}
-      >
-        {text}
+    <div className="home-illustration">
+      <div className="dashboard-mockup">
+        <div className="mockup-header">
+          <div className="mockup-dot"></div>
+          <div className="mockup-dot"></div>
+          <div className="mockup-dot"></div>
+        </div>
+
+        <div className="mockup-content">
+          <div className="invoice-preview">
+            {/* ✅ LocalStorage integrated editable div */}
+            <div
+              className="home-card"
+              contentEditable
+              suppressContentEditableWarning={true}
+              onBlur={handleBlur}
+              style={{ border: "1px dashed gray", padding: "8px" }}
+            >
+              {text}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
