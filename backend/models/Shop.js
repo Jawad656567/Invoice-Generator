@@ -1,13 +1,13 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
-const shopSchema = new mongoose.Schema({
+const ShopSchema = new mongoose.Schema({
   shopname: { type: String, required: true },
-  location: { type: String },
-  contact: { type: String },
-  email: { type: String },
-  owner: { type: String },
-  open: { type: String },
-  shopType: { type: String }
+  location: String,
+  contact: String,
+  email: String,
+  owner: String,
+  open: String,
+  shopType: String,
 }, { timestamps: true });
 
-module.exports = mongoose.model('Shop', shopSchema);
+export default mongoose.model("Shop", ShopSchema);

@@ -2,11 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "./product.css";
 
-// ✅ API base URL (local vs production dono ke liye support)
-const API_URL =
-  process.env.NODE_ENV === "production"
-    ? process.env.REACT_APP_API_URL
-    : process.env.REACT_APP_LOCAL_API_URL;
+const API_URL = process.env.REACT_APP_LOCAL_API_URL || "http://localhost:5000/api";
 
 function Detail() {
   const [step, setStep] = useState(1);
@@ -16,7 +12,6 @@ function Detail() {
   const [successMessage, setSuccessMessage] = useState("");
   const [savedInvoice, setSavedInvoice] = useState(null);
 
-  // Load state from localStorage when page refreshes
   useEffect(() => {
     const savedStep = localStorage.getItem("step");
     const savedCustomer = localStorage.getItem("customer");
@@ -29,7 +24,6 @@ function Detail() {
     if (savedInvoiceData) setSavedInvoice(JSON.parse(savedInvoiceData));
   }, []);
 
-  // Save state to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("step", step);
     localStorage.setItem("customer", JSON.stringify(customer));
@@ -67,8 +61,12 @@ function Detail() {
       const res = await axios.post(`${API_URL}/invoices`, invoiceData);
       setSavedInvoice(res.data);
       setStep(3);
+      localStorage.removeItem("customer");
+      localStorage.removeItem("products");
+      localStorage.removeItem("step");
     } catch (err) {
       console.error("❌ Error saving invoice:", err);
+      alert("Error saving invoice. Check backend connection!");
     }
   };
 
@@ -81,7 +79,7 @@ function Detail() {
     setCustomer({});
     setProducts([]);
     setSavedInvoice(null);
-    localStorage.clear(); // clear saved state
+    localStorage.clear();
   };
 
   return (
@@ -105,7 +103,7 @@ function Detail() {
             placeholder="Enter address"
             defaultValue={customer.address || ""}
             required
-          ></textarea>
+          />
 
           <label>Invoice Date:</label>
           <input
@@ -156,15 +154,9 @@ function Detail() {
           <h1>Invoice Summary</h1>
 
           <h2>Customer Info</h2>
-          <p>
-            <strong>Name:</strong> {savedInvoice.customer.name}
-          </p>
-          <p>
-            <strong>Address:</strong> {savedInvoice.customer.address}
-          </p>
-          <p>
-            <strong>Date:</strong> {savedInvoice.customer.invoiceDate}
-          </p>
+          <p><strong>Name:</strong> {savedInvoice.customer.name}</p>
+          <p><strong>Address:</strong> {savedInvoice.customer.address}</p>
+          <p><strong>Date:</strong> {savedInvoice.customer.invoiceDate}</p>
 
           <h2>Products</h2>
           <table>
@@ -189,8 +181,7 @@ function Detail() {
           </table>
 
           <h3>
-            Grand Total:{" "}
-            {savedInvoice.products.reduce((sum, o) => sum + Number(o.total), 0)}
+            Grand Total: {savedInvoice.products.reduce((sum, o) => sum + Number(o.total), 0)}
           </h3>
 
           <div className="button-group no-print">

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+const API_URL = process.env.REACT_APP_LOCAL_API_URL || "http://localhost:5000/api";
+
 function HomeCard() {
   const [text, setText] = useState("Enter your shop or mall information here.");
   const [savedData, setSavedData] = useState(null);
@@ -9,14 +11,14 @@ function HomeCard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/shops");
+        const res = await axios.get(`${API_URL}/shops`);
         if (res.data.length > 0) {
-          // Assuming first shop for demo
-          setSavedData(res.data[0]);
-          setText(res.data[0].shopname);
+          const shop = res.data[0]; // assuming first shop for demo
+          setSavedData(shop);
+          setText(shop.shopname || "Enter your shop or mall information here.");
         }
       } catch (err) {
-        console.error("Error fetching data:", err);
+        console.error("❌ Error fetching shop data:", err);
       }
     };
     fetchData();
@@ -26,18 +28,17 @@ function HomeCard() {
     const newText = e.target.innerText;
     setText(newText);
 
-    // Send updated text to backend
     try {
       let res;
       if (savedData) {
         // Update existing shop
-        res = await axios.put(
-          `http://localhost:5000/api/shops/${savedData._id}`,
-          { shopname: newText }
-        );
+        res = await axios.put(`${API_URL}/shops/${savedData._id}`, {
+          ...savedData,
+          shopname: newText,
+        });
       } else {
         // Create new shop
-        res = await axios.post("http://localhost:5000/api/shops", {
+        res = await axios.post(`${API_URL}/shops`, {
           shopname: newText,
           location: "",
           contact: "",
@@ -49,7 +50,7 @@ function HomeCard() {
       }
       setSavedData(res.data);
     } catch (err) {
-      console.error("Error saving to backend:", err);
+      console.error("❌ Error saving shop data:", err);
     }
   };
 

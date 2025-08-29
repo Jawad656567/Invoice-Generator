@@ -2,11 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "./shopdetails.css";
 
-// ✅ API base URL choose depending on environment
-const API_URL =
-  process.env.NODE_ENV === "production"
-    ? process.env.REACT_APP_API_URL
-    : process.env.REACT_APP_LOCAL_API_URL;
+const API_URL = process.env.REACT_APP_LOCAL_API_URL;
+
 
 function Shop() {
   const [shopname, setShopname] = useState("");
@@ -20,7 +17,7 @@ function Shop() {
   const [isEditing, setIsEditing] = useState(true);
   const [loading, setLoading] = useState(true);
 
-  // Load existing data from backend
+  // ✅ Load shop data from backend only
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -36,8 +33,6 @@ function Shop() {
           setOpen(shop.open || "");
           setShopType(shop.shopType || "");
           setIsEditing(false);
-        } else {
-          setIsEditing(true);
         }
       } catch (err) {
         console.error("❌ Error fetching shop data:", err);
@@ -48,13 +43,13 @@ function Shop() {
     fetchData();
   }, []);
 
-  const handler = async (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
     const data = { shopname, location, contact, email, owner, open, shopType };
 
     try {
       let res;
-      if (savedData) {
+      if (savedData?._id) {
         res = await axios.put(`${API_URL}/shops/${savedData._id}`, data);
       } else {
         res = await axios.post(`${API_URL}/shops`, data);
@@ -63,6 +58,7 @@ function Shop() {
       setIsEditing(false);
     } catch (err) {
       console.error("❌ Error saving shop:", err);
+      alert("Error saving shop. Check backend connection!");
     }
   };
 
@@ -71,64 +67,29 @@ function Shop() {
   return (
     <div className="shop-container">
       {isEditing ? (
-        <form onSubmit={handler}>
+        <form onSubmit={handleSave}>
           <h1>Enter Shop Details</h1>
 
           <label>Shop Name:</label>
-          <input
-            type="text"
-            value={shopname}
-            onChange={(e) => setShopname(e.target.value)}
-            required
-          />
+          <input type="text" value={shopname} onChange={(e) => setShopname(e.target.value)} required />
 
           <label>Location:</label>
-          <input
-            type="text"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            required
-          />
+          <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} required />
 
           <label>Contact Number:</label>
-          <input
-            type="text"
-            value={contact}
-            onChange={(e) => setContact(e.target.value)}
-            required
-          />
+          <input type="text" value={contact} onChange={(e) => setContact(e.target.value)} required />
 
           <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
 
           <label>Owner Name:</label>
-          <input
-            type="text"
-            value={owner}
-            onChange={(e) => setOwner(e.target.value)}
-            required
-          />
+          <input type="text" value={owner} onChange={(e) => setOwner(e.target.value)} required />
 
           <label>Opening Hours:</label>
-          <input
-            type="text"
-            value={open}
-            placeholder="9am to 9pm"
-            onChange={(e) => setOpen(e.target.value)}
-            required
-          />
+          <input type="text" value={open} placeholder="9am to 9pm" onChange={(e) => setOpen(e.target.value)} required />
 
           <label>Shop Type:</label>
-          <select
-            value={shopType}
-            onChange={(e) => setShopType(e.target.value)}
-            required
-          >
+          <select value={shopType} onChange={(e) => setShopType(e.target.value)} required>
             <option value="">Select</option>
             <option value="retail">Retail</option>
             <option value="food">Food</option>
@@ -159,9 +120,7 @@ function Shop() {
         )
       )}
       {!savedData && !isEditing && (
-        <p style={{ textAlign: "center" }}>
-          No shop data yet. Please add your shop details.
-        </p>
+        <p style={{ textAlign: "center" }}>No shop data yet. Please add your shop details.</p>
       )}
     </div>
   );
