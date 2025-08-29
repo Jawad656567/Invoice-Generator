@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "./product.css";
 
-const API_URL = process.env.REACT_APP_LOCAL_API_URL || "http://localhost:5000/api";
+const API_URL = process.env.REACT_APP_API_URL;
+
 
 function Detail() {
   const [step, setStep] = useState(1);

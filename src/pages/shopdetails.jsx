@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "./shopdetails.css";
 
-const API_URL = process.env.REACT_APP_LOCAL_API_URL;
+const API_URL = process.env.REACT_APP_API_URL;
+
 
 
 function Shop() {
