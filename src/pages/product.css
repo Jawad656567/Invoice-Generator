@@ -8,7 +8,7 @@ body {
 }
 
 .product-container {
-  max-width: 400px;
+  max-width: 520px;
   margin: 40px auto;
   padding: 32px;
   background: #FFFFFF;
@@ -379,6 +379,7 @@ body {
   .product-container,
   .summary-container {
     padding: 20px 16px;
+    max-width: 350px;
     border-radius: 0.75rem;
   }
   
