@@ -419,3 +419,16 @@ body {
     animation: none;
   }
 }
+@media print {
+  /* ✅ Ye sirf print ke time chalega */
+  .navbar,
+  .footer,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Invoice summary ko properly print karne ke liye */
+  .invoice-summary {
+    width: 100%;
+  }
+}
