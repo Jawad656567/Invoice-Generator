@@ -5,7 +5,6 @@ import Footer from "../components/footer";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-
 function Detail() {
   const [step, setStep] = useState(1);
   const [customer, setCustomer] = useState({});
@@ -14,6 +13,25 @@ function Detail() {
   const [successMessage, setSuccessMessage] = useState("");
   const [savedInvoice, setSavedInvoice] = useState(null);
 
+  // ✅ Shop data states
+  const [shopData, setShopData] = useState(null);
+
+  // ✅ Load shop data (for summary)
+  useEffect(() => {
+    const fetchShop = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/shops`);
+        if (res.data && res.data.length > 0) {
+          setShopData(res.data[0]);
+        }
+      } catch (err) {
+        console.error("❌ Error fetching shop:", err);
+      }
+    };
+    fetchShop();
+  }, []);
+
+  // ✅ Load local data
   useEffect(() => {
     const savedStep = localStorage.getItem("step");
     const savedCustomer = localStorage.getItem("customer");
@@ -26,6 +44,7 @@ function Detail() {
     if (savedInvoiceData) setSavedInvoice(JSON.parse(savedInvoiceData));
   }, []);
 
+  // ✅ Save local data
   useEffect(() => {
     localStorage.setItem("step", step);
     localStorage.setItem("customer", JSON.stringify(customer));
@@ -86,117 +105,134 @@ function Detail() {
 
   return (
     <>
-    <div>
-      {step === 1 && (
-        <form className="product-container" onSubmit={Submitcustomer}>
-          <h1>Customer Details</h1>
+      <div>
+        {/* Step 1: Customer Details */}
+        {step === 1 && (
+          <form className="product-container" onSubmit={Submitcustomer}>
+            <h1>Customer Details</h1>
 
-          <label>Customer Name:</label>
-          <input
-            type="text"
-            name="name"
-            placeholder="Enter customer name"
-            defaultValue={customer.name || ""}
-            required
-          />
+            <label>Customer Name:</label>
+            <input
+              type="text"
+              name="name"
+              placeholder="Enter customer name"
+              defaultValue={customer.name || ""}
+              required
+            />
 
-          <label>Address:</label>
-          <textarea
-            name="address"
-            placeholder="Enter address"
-            defaultValue={customer.address || ""}
-            required
-          />
+            <label>Address:</label>
+            <textarea
+              name="address"
+              placeholder="Enter address"
+              defaultValue={customer.address || ""}
+              required
+            />
 
-          <label>Invoice Date:</label>
-          <input
-            type="date"
-            name="invoiceDate"
-            defaultValue={customer.invoiceDate || ""}
-            required
-          />
+            <label>Invoice Date:</label>
+            <input
+              type="date"
+              name="invoiceDate"
+              defaultValue={customer.invoiceDate || ""}
+              required
+            />
 
-          <div className="button-group no-print">
-            <button type="submit">Next →</button>
-          </div>
-        </form>
-      )}
+            <div className="button-group no-print">
+              <button type="submit">Next →</button>
+            </div>
+          </form>
+        )}
 
-      {step === 2 && (
-        <form className="product-container" onSubmit={submitproduct}>
-          <h1>Product Details</h1>
+        {/* Step 2: Product Details */}
+        {step === 2 && (
+          <form className="product-container" onSubmit={submitproduct}>
+            <h1>Product Details</h1>
 
-          <label>Product Name:</label>
-          <input type="text" name="productName" required />
+            <label>Product Name:</label>
+            <input type="text" name="productName" required />
 
-          <label>Price:</label>
-          <input type="number" name="price" required />
+            <label>Price:</label>
+            <input type="number" name="price" required />
 
-          <label>Quantity:</label>
-          <input type="number" name="quantity" required />
+            <label>Quantity:</label>
+            <input type="number" name="quantity" required />
 
-          <label>Description:</label>
-          <textarea name="description"></textarea>
+            <label>Description:</label>
+            <textarea name="description"></textarea>
 
-          {productAdded && <p className="success-text">{successMessage}</p>}
+            {productAdded && <p className="success-text">{successMessage}</p>}
 
-          <div className="button-group no-print">
-            <button type="submit">Add Product</button>
-            <button type="button" onClick={handleReset}>
-              Reset
-            </button>
-            <button type="button" onClick={handleSaveInvoice}>
-              Next
-            </button>
-          </div>
-        </form>
-      )}
+            <div className="button-group no-print">
+              <button type="submit">Add Product</button>
+              <button type="button" onClick={handleReset}>
+                Reset
+              </button>
+              <button type="button" onClick={handleSaveInvoice}>
+                Next
+              </button>
+            </div>
+          </form>
+        )}
 
-      {step === 3 && savedInvoice && (
-        <div className="summary-container">
-          <h1>Invoice Summary</h1>
+        {/* Step 3: Invoice Summary */}
+        {step === 3 && savedInvoice && (
+          <div className="summary-container">
+            <h1>Invoice Summary</h1>
 
-          <h2>Customer Info</h2>
-          <p><strong>Name:</strong> {savedInvoice.customer.name}</p>
-          <p><strong>Address:</strong> {savedInvoice.customer.address}</p>
-          <p><strong>Date:</strong> {savedInvoice.customer.invoiceDate}</p>
+            {/* ✅ Shop Info from Shop.js */}
+            {shopData && (
+              <>
+                <h2>Shop Info</h2>
+                <p><strong>Shop Name:</strong> {shopData.shopname}</p>
+                <p><strong>Location:</strong> {shopData.location}</p>
+                <p><strong>Contact:</strong> {shopData.contact}</p>
+              </>
+            )}
 
-          <h2>Products</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Qty</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {savedInvoice.products.map((p, index) => (
-                <tr key={index}>
-                  <td>{p.productName}</td>
-                  <td>{p.price}</td>
-                  <td>{p.quantity}</td>
-                  <td>{p.total}</td>
+            <h2>Customer Info</h2>
+            <p><strong>Name:</strong> {savedInvoice.customer.name}</p>
+            <p><strong>Address:</strong> {savedInvoice.customer.address}</p>
+            <p><strong>Date:</strong> {savedInvoice.customer.invoiceDate}</p>
+
+            <h2>Products</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Price</th>
+                  <th>Qty</th>
+                  <th>Total</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {savedInvoice.products.map((p, index) => (
+                  <tr key={index}>
+                    <td>{p.productName}</td>
+                    <td>{p.price}</td>
+                    <td>{p.quantity}</td>
+                    <td>{p.total}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
-          <h3>
-            Grand Total: {savedInvoice.products.reduce((sum, o) => sum + Number(o.total), 0)}
-          </h3>
+            <h3>
+              Grand Total:{" "}
+              {savedInvoice.products.reduce(
+                (sum, o) => sum + Number(o.total),
+                0
+              )}
+            </h3>
 
-          <div className="button-group no-print">
-            <button onClick={handlePrint}>🖨 Print</button>
-            <button type="button" onClick={handleReset}>
-              Reset
-            </button>
+            <div className="button-group no-print">
+              <button onClick={handlePrint}>🖨 Print</button>
+              <button type="button" onClick={handleReset}>
+                Reset
+              </button>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
-    <Footer />
+        )}
+      </div>
+      <Footer />
     </>
   );
 }
